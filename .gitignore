@@ -3,3 +3,4 @@
 out
 .bloop
 .coursier
+.DS_Store
