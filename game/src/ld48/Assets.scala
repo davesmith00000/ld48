@@ -11,11 +11,11 @@ object Player1 {
     Set(
       AssetType.Image(
         Player1.ref,
-        AssetPath(baseUrl + "assets/" + Player1.ref.value + ".png")
+        AssetPath(baseUrl + "assets/" + Player1.ref.toString + ".png")
       ),
       AssetType.Text(
         Player1.jsonRef,
-        AssetPath(baseUrl + "assets/" + Player1.ref.value + ".json")
+        AssetPath(baseUrl + "assets/" + Player1.ref.toString + ".json")
       )
     )
 }
@@ -28,11 +28,11 @@ object Player2 {
     Set(
       AssetType.Image(
         Player2.ref,
-        AssetPath(baseUrl + "assets/" + Player2.ref.value + ".png")
+        AssetPath(baseUrl + "assets/" + Player2.ref.toString + ".png")
       ),
       AssetType.Text(
         Player2.jsonRef,
-        AssetPath(baseUrl + "assets/" + Player2.ref.value + ".json")
+        AssetPath(baseUrl + "assets/" + Player2.ref.toString + ".json")
       )
     )
 }

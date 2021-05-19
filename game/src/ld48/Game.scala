@@ -10,7 +10,6 @@ import indigo.shared.events
 import events.MouseEvent.Click
 import scala.concurrent.duration._
 import scala.language.postfixOps
-import ld48._
 import HelloIndigo.magnification
 import indigo.shared.materials
 import indigoextras.effectmaterials.Border

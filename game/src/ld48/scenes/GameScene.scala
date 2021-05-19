@@ -3,7 +3,7 @@ package ld48.scenes
 import ld48.models._
 import indigo._
 import indigo.scenes._
-import ld48._
+import ld48.HelloIndigo
 
 object GameScene extends Scene[Unit, GlobalModel, Unit] {
   type SceneModel     = GameModel
@@ -24,26 +24,26 @@ object GameScene extends Scene[Unit, GlobalModel, Unit] {
   def updateModel(context: FrameContext[Unit], model: SceneModel) = {
 
     case KeyboardEvent.KeyDown(Key.KEY_J) =>
-      Outcome(model.copy(player2 = model.player2.move("left", true)))
+      Outcome(model.copy(player2 = model.player2.move(Left("left"), true)))
     case KeyboardEvent.KeyDown(Key.KEY_L) =>
-      Outcome(model.copy(player2 = model.player2.move("right", true)))
+      Outcome(model.copy(player2 = model.player2.move(Right("right"), true)))
     case KeyboardEvent.KeyUp(Key.KEY_J) =>
-      Outcome(model.copy(player2 = model.player2.move("left", false)))
+      Outcome(model.copy(player2 = model.player2.move(Left("left"), false)))
     case KeyboardEvent.KeyUp(Key.KEY_L) =>
-      Outcome(model.copy(player2 = model.player2.move("right", false)))
+      Outcome(model.copy(player2 = model.player2.move(Right("right"), false)))
     case KeyboardEvent.KeyDown(Key.KEY_U) =>
       Outcome(model.copy(player2 = model.player2.kick))
     case KeyboardEvent.KeyDown(Key.KEY_O) =>
       Outcome(model.copy(player2 = model.player2.punch))
 
     case KeyboardEvent.KeyDown(Key.KEY_A) =>
-      Outcome(model.copy(player1 = model.player1.move("left", true)))
+      Outcome(model.copy(player1 = model.player1.move(Left("left"), true)))
     case KeyboardEvent.KeyDown(Key.KEY_D) =>
-      Outcome(model.copy(player1 = model.player1.move("right", true)))
+      Outcome(model.copy(player1 = model.player1.move(Right("right"), true)))
     case KeyboardEvent.KeyUp(Key.KEY_A) =>
-      Outcome(model.copy(player1 = model.player1.move("left", false)))
+      Outcome(model.copy(player1 = model.player1.move(Left("left"), false)))
     case KeyboardEvent.KeyUp(Key.KEY_D) =>
-      Outcome(model.copy(player1 = model.player1.move("right", false)))
+      Outcome(model.copy(player1 = model.player1.move(Right("right"), false)))
     case KeyboardEvent.KeyDown(Key.KEY_Q) =>
       Outcome(model.copy(player1 = model.player1.kick))
     case KeyboardEvent.KeyDown(Key.KEY_E) =>
@@ -52,14 +52,14 @@ object GameScene extends Scene[Unit, GlobalModel, Unit] {
     case KeyboardEvent.KeyDown(Key.KEY_0) =>
       Outcome(model.copy(halted = !model.halted))
 
-    case FrameTick if (!model.gameOver) =>
+    case FrameTick if !model.gameOver =>
       Outcome(
         model.update(
           context.delta
         )
       )
 
-    case FrameTick if (model.gameOver) =>
+    case FrameTick if model.gameOver =>
       Outcome(
         model
       ).addGlobalEvents(SceneEvent.JumpTo(EndGameScene.name))

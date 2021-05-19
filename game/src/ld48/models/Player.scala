@@ -3,7 +3,6 @@ package ld48.models
 import indigo._
 import indigo.shared.datatypes.Vector2
 import indigo.shared.time.Seconds
-import ld48._
 import indigo.shared.datatypes.Rectangle
 import indigo.shared.scenegraph.Graphic
 import indigo.shared.materials.Material
@@ -13,6 +12,7 @@ import indigoextras.effectmaterials.LegacyEffects
 import ld48.Loader
 import ld48.Player1
 import ld48.Player2
+import ld48.HelloIndigo
 
 case class Player(
     facing: Either["left", "right"],
@@ -77,7 +77,7 @@ case class Player(
         )
       else
         Rectangle(
-          position.moveBy(18, 15).toPoint - punchSize.withY(0),
+          position.moveBy(18, 15).toPoint - punchSize.withHeight(0).toPoint,
           punchSize //                      ^
         )           // rectangle collision is broken for negative sizes, so origin can't be top right
     else if (kicking)
@@ -85,7 +85,7 @@ case class Player(
         Rectangle(position.moveBy(16, 22).toPoint, kickSize)
       else
         Rectangle(
-          position.moveBy(16, 22).toPoint - kickSize.withY(0),
+          position.moveBy(16, 22).toPoint - kickSize.withHeight(0).toPoint,
           kickSize //                       ^
         )          //               same as for punch
     else
@@ -109,13 +109,13 @@ case class Player(
 
     val newVelocity = {
       val Vector2(x, y) =
-        (velocity + updatedAcceleration * t * moveSpeed) * effectiveDrag
+        (velocity + updatedAcceleration * t.toDouble * moveSpeed) * effectiveDrag
       Vector2(math.max(math.min(maxSpeed, x), maxSpeed * -1), y)
     }
 
     val precollisionPosition = {
       val Vector2(x, y) =
-        position + (newVelocity * t) + updatedAcceleration * t * t * .5 + gravity
+        position + (newVelocity * t.toDouble) + updatedAcceleration * (t * t * .5).toDouble + gravity
       val wallCorrectedX =
         math.min(
           HelloIndigo.viewportWidth / HelloIndigo.magnification - 16,
@@ -125,7 +125,7 @@ case class Player(
     }
 
     val collisionCorrectedPosition = platforms
-      .map(platform => {
+      .map { platform =>
         platform.blockList.zipWithIndex
           .collect { case (Some(_), i) => i }
           .collectFirst(
@@ -138,7 +138,7 @@ case class Player(
                   )
             ).unlift
           )
-      })
+      }
       .collectFirst { case Some(y) => precollisionPosition.copy(y = y) }
       .getOrElse(precollisionPosition)
 
@@ -150,8 +150,8 @@ case class Player(
       punchCooldown = punchCooldown - t,
       kickCooldown = kickCooldown - t,
       facing = velocity.x match {
-        case x if x > 0.01  => "right"
-        case x if x < -0.01 => "left"
+        case x if x > 0.01  => Right("right")
+        case x if x < -0.01 => Left("left")
         case _              => facing
       }
     )
@@ -173,8 +173,8 @@ case class Player(
 }
 
 object Player {
-  val kickSize  = Point(13, 6)
-  val punchSize = Point(16, 5)
+  val kickSize  = Size(13, 6)
+  val punchSize = Size(16, 5)
 
   def renderSheet(isPlayerOne: Boolean) = Graphic(
     32,
@@ -192,7 +192,7 @@ object Player {
   def renderKick(isPlayerOne: Boolean) =
     renderSheet(isPlayerOne).withCrop(3 * 32, 0, 32, 32)
 
-  def computeHitbox(position: Vector2, isAttack: Boolean) = {
+  def computeHitbox(position: Vector2, isAttack: Boolean) =
     if (isAttack) {
       val ul = position + Vector2(7, 1)
       val lr = ul + Vector2(16, 31)
@@ -202,7 +202,6 @@ object Player {
       val lr = ul + Vector2(12, 6)
       Rectangle.fromTwoPoints(ul.toPoint, lr.toPoint)
     }
-  }
 
   // return corrected player y value
   def playerCollidesBlock(

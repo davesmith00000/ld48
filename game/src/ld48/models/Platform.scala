@@ -1,11 +1,11 @@
 package ld48.models
 
-import ld48._
 import indigo._
+import ld48.HelloIndigo
 
 case class Platform(y: Double, blockList: Seq[Option[Block]]) {
   def update(speed: Double, t: Seconds, halted: Boolean): Platform =
-    if (halted) this else this.copy(y = y - (speed + 30) * t * 1.5)
+    if (halted) this else this.copy(y = y - (speed + 30) * t.toDouble * 1.5)
 
   def render =
     blockList.zipWithIndex.collect { case (Some(block), i) =>
@@ -15,7 +15,7 @@ case class Platform(y: Double, blockList: Seq[Option[Block]]) {
 
 object Platform {
   def getRandomBlock(r: scala.util.Random): Option[Block] =
-    if (r.nextFloat() > 0.2) Block() else None
+    if (r.nextFloat() > 0.2) Option(Block()) else None
 
   def addPlatform(y: Double): Platform = {
     val r = new scala.util.Random()

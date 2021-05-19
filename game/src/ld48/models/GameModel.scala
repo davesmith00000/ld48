@@ -3,11 +3,11 @@ package ld48.models
 import indigo.shared.time.Seconds
 import indigo.shared.datatypes.Vector2
 import indigo.shared.datatypes.RGBA
-import ld48._
 import ld48.controllers.Combat
 import indigo.shared.scenegraph.Graphic
 import indigo.shared.materials.Material
 import indigo.shared.datatypes.Point
+import ld48.HelloIndigo
 
 case class GameModel(
     time: Seconds,
@@ -68,14 +68,13 @@ case class GameModel(
   def reset(): GameModel = GameModel.initial
 
   def renderBackground =
-    for (i <- 0 until 165) yield {
-      GameModel.background.moveTo(
+    for (i <- 0 until 165)
+      yield GameModel.background.moveTo(
         Point(
           (i % 11) * 32,
           ((i / 11) * 32)
-        ) - Point(0, (time).toInt)
+        ) - Point(0, time.toInt)
       )
-    }
 }
 
 object GameModel {
@@ -91,7 +90,7 @@ object GameModel {
       time = Seconds(0),
       spawnTimer = Seconds(99), // always spawn one right away
       player1 = Player(
-        "right",
+        Right("right"),
         Vector2(100, 20),
         Vector2(0, 0),
         Vector2(0, 0),
@@ -99,7 +98,7 @@ object GameModel {
         isPlayerOne = true
       ),
       player2 = Player(
-        "left",
+        Left("left"),
         Vector2(300, 20),
         Vector2(0, 0),
         Vector2(0, 0),
@@ -107,7 +106,7 @@ object GameModel {
         isPlayerOne = false
       ),
       winner = Player(
-        "left",
+        Left("left"),
         Vector2(300, 300),
         Vector2(0, 0),
         Vector2(0, 0),

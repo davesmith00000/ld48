@@ -2,10 +2,10 @@ import mill._, scalalib._
 import mill.scalajslib._
 import mill.scalajslib.api._
 
-import $ivy.`io.indigoengine::mill-indigo:0.7.0`, millindigo._
+import $ivy.`io.indigoengine::mill-indigo:0.8.1-SNAPSHOT`, millindigo._
 
 object game extends ScalaJSModule with MillIndigo {
-  def scalaVersion   = "2.13.5"
+  def scalaVersion   = "3.0.0"
   def scalaJSVersion = "1.5.1"
 
   val gameAssetsDirectory = os.pwd / "assets"
@@ -15,8 +15,9 @@ object game extends ScalaJSModule with MillIndigo {
   val windowStartHeight   = 720
 
   def ivyDeps = Agg(
-    ivy"io.indigoengine::indigo-json-circe::0.7.0",
-    ivy"io.indigoengine::indigo::0.7.1"
+    ivy"io.indigoengine::indigo-json-circe::0.8.1-SNAPSHOT",
+    ivy"io.indigoengine::indigo::0.8.1-SNAPSHOT",
+    ivy"io.indigoengine::indigo-extras::0.8.1-SNAPSHOT"
   )
 
   def buildGame() = T.command {
